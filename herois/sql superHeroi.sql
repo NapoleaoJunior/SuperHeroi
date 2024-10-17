@@ -1,0 +1,11 @@
+INSERT INTO super_heroi (nome, primeira_aparicao, apelido, super_poder, fraqueza, historia_origem) VALUES
+('Aurora Blaze', '2022-05-15', 'A Chama Celestial', 'Controle sobre o fogo e a luz', 'Água e ambientes úmidos', 'Aurora descobriu seus poderes após um acidente em um laboratório de física, onde foi exposta a uma explosão de energia solar concentrada.'),
+('Tempest Knight', '2019-11-03', 'O Cavaleiro da Tempestade', 'Manipulação do clima', 'Ambientes fechados e sem acesso ao céu', 'Um antigo guerreiro que foi ressuscitado por um ritual místico durante uma tempestade elétrica.'),
+('Shadow Whisper', '2021-08-21', 'O Sussurro das Sombras', 'Invisibilidade e controle das sombras', 'Luz intensa', 'Um agente secreto que ganhou seus poderes após um experimento com tecnologia de camuflagem avançada.'),
+('Terra Guardian', '2020-04-10', 'Guardião da Terra', 'Controle sobre plantas e terra', 'Fogo', 'Um botânico que, após um ritual antigo, se tornou o protetor dos elementos naturais.'),
+('Quantum Surge', '2023-01-17', 'O Impulso Quântico', 'Manipulação de energia quântica', 'Campos magnéticos fortes', 'Um físico que, após um experimento mal-sucedido com partículas quânticas, ganhou habilidades extraordinárias.'),
+('Siren Song', '2018-07-30', 'A Canção da Sereia', 'Controle mental através da voz', 'Surdez e ambientes sem som', 'Uma cantora que descobriu seu poder após um encontro misterioso com uma criatura marinha.'),
+('Iron Sentinel', '2021-12-05', 'O Sentinela de Ferro', 'Superforça e resistência', 'Campos de força magnéticos', 'Um engenheiro que criou uma armadura indestrutível após um acidente em sua fábrica.'),
+('Mystic Weaver', '2020-09-14', 'O Tecelão Místico', 'Controle sobre a magia e feitiços', 'Tecnologia avançada', 'Um mago antigo que despertou em um mundo moderno, trazendo consigo conhecimentos arcanos.'),
+('Frostbite', '2019-02-28', 'A Mordida do Gelo', 'Controle sobre o gelo e neve', 'Calor extremo', 'Um explorador polar que ganhou poderes após um encontro com um artefato antigo no Ártico.'),
+('Vortex', '2022-06-11', 'O Vórtice', 'Criação e controle de portais dimensionais', 'Desorientação em múltiplas dimensões', 'Um cientista que, após um experimento com buracos de minhoca, ganhou a habilidade de viajar entre dimensões.');

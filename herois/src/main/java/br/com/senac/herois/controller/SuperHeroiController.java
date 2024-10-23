@@ -28,6 +28,14 @@ public class SuperHeroiController {
     public ResponseEntity<?> getById(@PathVariable int id) {
         return new ResponseEntity<>(superHeroiRepository.findById(id), HttpStatus.OK);
     }
+    @GetMapping("superHeroi/nome/{nome}")
+    public ResponseEntity<?> getByNome(@PathVariable String nome) {
+        return new ResponseEntity<>(superHeroiRepository.findByNomeLike("%" + nome + "%"), HttpStatus.OK);
+    }
+    @GetMapping("superHeroi/apelido/{apelido}")
+    public ResponseEntity<?> getByApelido(@PathVariable String apelido) {
+        return new ResponseEntity<>(superHeroiRepository.findByNomeLike("%" + apelido + "%"), HttpStatus.OK);
+    }
     @PostMapping("/superHeroi")
     public ResponseEntity<?> salvaSuperHeroi(@RequestBody SuperHeroi entity) {
         SuperHeroi superHeroiSalvo;

@@ -1,4 +1,5 @@
 package br.com.senac.herois.entity;
+
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -6,11 +7,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "superHeroi")
 public class SuperHeroi {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -23,14 +27,26 @@ public class SuperHeroi {
     @Column
     private String superPoder;
     @Column
-    private String fraqueza; 
+    private String fraqueza;
     @Column
-    private String historiaOrigem; 
+    private String historiaOrigem;
 
-    public String exibirDados() {
-        return getId() + getNome() + getPrimeiraApricao() + getApelido() + getSuperPoder() +getFraqueza() + getHistoriaOrigem();
+    @OneToOne
+    @JoinColumn(name = "superHeroi_id", referencedColumnName = "id")
+    private Equipe equipe;
+
+    public Equipe getEquipe() {
+        return equipe;
     }
 
+    public void setEquipe(Equipe equipe) {
+        this.equipe = equipe;
+    }
+
+    public String exibirDados() {
+        return getId() + getNome() + getPrimeiraApricao() + getApelido() + getSuperPoder() + getFraqueza() + getHistoriaOrigem();
+    }
+    
     public int getId() {
         return id;
     }
@@ -86,5 +102,5 @@ public class SuperHeroi {
     public void setHistoriaOrigem(String historiaOrigem) {
         this.historiaOrigem = historiaOrigem;
     }
-    
+
 }

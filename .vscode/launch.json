@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-SuperHeroiApplication<herois>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "br.com.senac.herois.SuperHeroiApplication",
+            "projectName": "herois",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

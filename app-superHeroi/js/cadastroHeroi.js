@@ -1,36 +1,29 @@
 $( "button.btn-secondary" ).on( "click", function( event ) {
     document.location = '../index.html';
 });
-
 function carregarSelect() {
     axios.get('http://localhost:8080/categoria')
     .then(function (response) {
         var jsonData = response.data;
         var select = $("#categoria");
-
         jsonData.forEach(bemOuMal => {
             optionText = bemOuMal.nome;
             optionValue = bemOuMal.id;
             let optionHTML = `
-            <option value="${optionValue}"> 
+            <option value="${optionValue}">
                 ${optionText} 
             </option>`;
             select.append(optionHTML);
         });
-
     })
     .catch(function (error) {
         // handle error
         console.log(error);
     });
-
-
-
-    axios.get('http://localhost:8080/fornecedor')
+    axios.get('http://localhost:8080/equipe')
     .then(function (response) {
         var jsonData = response.data;
         var select = $("#equipe");
-
         jsonData.forEach(equipe => {
             optionText = equipe.nome;
             optionValue = equipe.id;
@@ -40,15 +33,12 @@ function carregarSelect() {
             </option>`;
             select.append(optionHTML);
         });
-
     })
     .catch(function (error) {
         // handle error
         console.log(error);
     });
-
 }
-
 function cadastrarSuperHeroi() {
     var superHeroi = $("#superHeroi").val();
     var primeiraAparicao = $("#primeiraAparicao").val();
@@ -84,5 +74,4 @@ function cadastrarSuperHeroi() {
         console.log(error);
     });
 }
-
 carregarSelect();

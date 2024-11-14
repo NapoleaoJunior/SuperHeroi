@@ -1,6 +1,8 @@
 package br.com.senac.herois.controller;
 
+import java.util.List;
 import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,78 +12,134 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import br.com.senac.herois.entity.SuperHeroi;
 import br.com.senac.herois.repository.SuperHeroiRepository;
 
 @RestController
 public class SuperHeroiController {
+
     private SuperHeroiRepository superHeroiRepository;
-    
+
     public SuperHeroiController(SuperHeroiRepository superHeroiRepository) {
         this.superHeroiRepository = superHeroiRepository;
     }
-     @GetMapping("/superHeroi")
-    public ResponseEntity<?> getDadosSuperHeroi() {
-        return new ResponseEntity<>(superHeroiRepository.findAll(), HttpStatus.OK);
+
+    // Endpoint para buscar todos os super-heróis sem dados recursivos
+    @GetMapping("/superHeroi")
+    public ResponseEntity<List<SuperHeroi>> getDadosSuperHeroi() {
+        List<SuperHeroi> superHerois = superHeroiRepository.findAll();
+
+        // A partir daqui, podemos modificar os dados para garantir que não haja dados recursivos
+        for (SuperHeroi hero : superHerois) {
+            if (hero.getEquipe() != null) {
+                // Evitar a inclusão de heróis da equipe na resposta, mantendo apenas os dados essenciais
+                hero.getEquipe().setSuperHeroi(null);
+            }
+        }
+
+        return new ResponseEntity<>(superHerois, HttpStatus.OK);
     }
-     @GetMapping("superHeroi/{id}")
-    public ResponseEntity<?> getById(@PathVariable int id) {
-        return new ResponseEntity<>(superHeroiRepository.findById(id), HttpStatus.OK);
+
+    // Endpoint para buscar um super-herói por ID
+    @GetMapping("/superHeroi/{id}")
+    public ResponseEntity<Object> getById(@PathVariable int id) {
+        Optional<SuperHeroi> superHeroi = superHeroiRepository.findById(id);
+    
+        if (superHeroi.isPresent()) {
+            SuperHeroi hero = superHeroi.get();
+            if (hero.getEquipe() != null) {
+                // Evitar a inclusão de heróis da equipe na resposta
+                hero.getEquipe().setSuperHeroi(null);
+            }
+            return new ResponseEntity<>(hero, HttpStatus.OK);
+        } else {
+            // Retornando uma mensagem de erro como resposta
+            return new ResponseEntity<>("Super-herói não encontrado", HttpStatus.NOT_FOUND);
+        }
     }
-    @GetMapping("superHeroi/nome/{nome}")
-    public ResponseEntity<?> getByNome(@PathVariable String nome) {
-        return new ResponseEntity<>(superHeroiRepository.findByNomeLike("%" + nome + "%"), HttpStatus.OK);
+    
+
+    // Endpoint para buscar super-heróis pelo nome
+    @GetMapping("/superHeroi/nome/{nome}")
+    public ResponseEntity<List<SuperHeroi>> getByNome(@PathVariable String nome) {
+        List<SuperHeroi> superHerois = superHeroiRepository.findByNomeLike("%" + nome + "%");
+
+        for (SuperHeroi hero : superHerois) {
+            if (hero.getEquipe() != null) {
+                // Evitar a inclusão de heróis da equipe na resposta
+                hero.getEquipe().setSuperHeroi(null);
+            }
+        }
+
+        return new ResponseEntity<>(superHerois, HttpStatus.OK);
     }
-    @GetMapping("superHeroi/apelido/{apelido}")
-    public ResponseEntity<?> getByApelido(@PathVariable String apelido) {
-        return new ResponseEntity<>(superHeroiRepository.findByNomeLike("%" + apelido + "%"), HttpStatus.OK);
+
+    // Endpoint para buscar super-heróis pelo apelido
+    @GetMapping("/superHeroi/apelido/{apelido}")
+    public ResponseEntity<List<SuperHeroi>> getByApelido(@PathVariable String apelido) {
+        List<SuperHeroi> superHerois = superHeroiRepository.findByNomeLike("%" + apelido + "%");
+
+        for (SuperHeroi hero : superHerois) {
+            if (hero.getEquipe() != null) {
+                // Evitar a inclusão de heróis da equipe na resposta
+                hero.getEquipe().setSuperHeroi(null);
+            }
+        }
+
+        return new ResponseEntity<>(superHerois, HttpStatus.OK);
     }
+
+    // Endpoint para salvar um super-herói
     @PostMapping("/superHeroi")
     public ResponseEntity<?> salvaSuperHeroi(@RequestBody SuperHeroi entity) {
         SuperHeroi superHeroiSalvo;
         try {
             superHeroiSalvo = superHeroiRepository.save(entity);
         } catch (Exception e) {
-            return new ResponseEntity<String>("Erro ao salvar o super heroi", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Erro ao salvar o super-herói", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<SuperHeroi>(superHeroiSalvo, HttpStatus.OK);
+        return new ResponseEntity<>(superHeroiSalvo, HttpStatus.OK);
     }
-     @PutMapping("superHeroi/{id}")
+
+    // Endpoint para atualizar um super-herói
+    @PutMapping("/superHeroi/{id}")
     public ResponseEntity<?> atualizaSuperHeroi(@PathVariable int id, @RequestBody SuperHeroi entity) {
         Optional<SuperHeroi> superHeroiAtualizar = superHeroiRepository.findById(id);
-        SuperHeroi sh = null;
         if (superHeroiAtualizar.isPresent()) {
-            sh = superHeroiAtualizar.get();
+            SuperHeroi sh = superHeroiAtualizar.get();
             sh.setNome(entity.getNome());
             sh.setPrimeiraApricao(entity.getPrimeiraApricao());
             sh.setApelido(entity.getApelido());
             sh.setSuperPoder(entity.getSuperPoder());
             sh.setFraqueza(entity.getFraqueza());
             sh.setHistoriaOrigem(entity.getHistoriaOrigem());
+
             try {
                 sh = superHeroiRepository.save(sh);
             } catch (Exception e) {
-                return new ResponseEntity<String>("erro ao atualizar o super heroi", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Erro ao atualizar o super-herói", HttpStatus.BAD_REQUEST);
             }
-            return new ResponseEntity<SuperHeroi>(sh, HttpStatus.OK);
+            return new ResponseEntity<>(sh, HttpStatus.OK);
         } else {
-            return new ResponseEntity<String>("Super Heroi nao encontrado", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Super-herói não encontrado", HttpStatus.BAD_REQUEST);
         }
     }
-@DeleteMapping("/superHeroi/{id}")
+
+    // Endpoint para excluir um super-herói
+    @DeleteMapping("/superHeroi/{id}")
     public ResponseEntity<String> deleteProduto(@PathVariable int id) {
         Optional<SuperHeroi> superHeroiExcluir = superHeroiRepository.findById(id);
-        
+
         if (superHeroiExcluir.isPresent()) {
             try {
                 superHeroiRepository.delete(superHeroiExcluir.get());
-                return new ResponseEntity<>("super heroi excluído com sucesso", HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>("Super-herói excluído com sucesso", HttpStatus.NO_CONTENT);
             } catch (Exception e) {
-                return new ResponseEntity<>("Erro ao excluir o super heroi", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Erro ao excluir o super-herói", HttpStatus.BAD_REQUEST);
             }
         } else {
-            return new ResponseEntity<>("super heroi não encontrado", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Super-herói não encontrado", HttpStatus.NOT_FOUND);
         }
     }
 }
-

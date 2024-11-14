@@ -29,15 +29,12 @@ async function initMap(params) {
     $("#spinLoading").hide();
     $("#map").show();
     $("#titlemapasQG").show();
-
     map = L.map('map').setView([-15.812743484997265, -47.89300692050525], 13);
-
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: 
         '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
-
     axios.get("http://localhost:8080/loja")
     .then(response => {
         var jsonData = response.data;
@@ -50,7 +47,6 @@ async function initMap(params) {
         console.log(error);
     });    
 }
-
 $("#map").hide();
 $("#titlemapasQG").hide();
 setTimeout(initMap, 2000);
